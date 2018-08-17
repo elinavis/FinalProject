@@ -129,8 +129,8 @@ class VideoAnnotations():
         for idx, val in enumerate(self.ui_data_structure["Expressions"]):
             Radiobutton(self.mainView, text=val, variable=self.expressions_var, value=val).grid(sticky=W, row=20, column=idx)
 
-        Button(self.mainView, text="Play", command=self._onSubmit).grid(row=21, column = 4)
-        Button(self.mainView, text="RePlay", command=self._endOfVideo).grid(row=21, column=5)
+        Button(self.mainView, text="Play", command=self._onPlay).grid(row=21, column = 4)
+        Button(self.mainView, text="RePlay", command=self._onRePlay).grid(row=21, column=5)
 
 
     def _browse_button(self):
@@ -142,7 +142,7 @@ class VideoAnnotations():
         print(filename)
 
 
-    def _onSubmit(self):
+    def _onPlay(self):
 
         selected_subject = self.subject_var.get()
         print selected_subject
@@ -180,10 +180,10 @@ class VideoAnnotations():
             self._endOfVideo()
 
     def _endOfVideo(self):
-        # endOfVideo()
+        endOfVideo()
         ###at the end, print the file
-        f= open('data.js', 'w+')
-        json.dump({"a": 134, "b":2}, f)
-        # with open('data.js', 'w+') as outfile:
-        #     json.dump(self.results, outfile)
-        #     print self.results
+        with open('data.js', 'w+') as outfile:
+            json.dump(self.results, outfile)
+
+    def _onRePlay(self):
+        return

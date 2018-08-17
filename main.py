@@ -1,5 +1,4 @@
 from videoAnnotations import *
 
 va = VideoAnnotations()
-va.defineVideoPath()
-# va.createMainView()
+va.start()
