@@ -2,13 +2,13 @@ import cv2
 import time
 import tkMessageBox
 
-time_slot = 5
+time_slot = 500
 
-def startVideo():
+def startVideo(videoPath):
     # Create a VideoCapture object and read from input file
     # If the input is the camera, pass 0 instead of the video file name
     global cap
-    cap = cv2.VideoCapture('video.mp4')
+    cap = cv2.VideoCapture(videoPath)
 
     # Check if camera opened successfully
     if (cap.isOpened() == False):
