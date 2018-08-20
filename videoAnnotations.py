@@ -17,6 +17,7 @@ class VideoAnnotations():
         self.video_path_var = StringVar()
         self.exp_number_var = StringVar()
         self.round_var = StringVar()
+        self.name_var = StringVar()
 
         self.subject_var = StringVar()
         self.turn_var = StringVar()
@@ -43,14 +44,11 @@ class VideoAnnotations():
         self._createFirstView()
         self._createMainView()
 
-    def start(self):
-        self.firstView.grid(row=0, column = 0)
-        self.root.mainloop()
-
     def _goToMainView(self):
         self.firstView.grid_forget()
         self.mainView.grid(row=0, column = 0)
         startVideo(self.video_path_var.get())
+        playVideo()
 
 
     def _createFirstView(self):
@@ -64,6 +62,9 @@ class VideoAnnotations():
 
         Label(self.firstView, text="Round number").grid(row=3, column=0)
         OptionMenu(self.firstView, self.round_var, 0, 1).grid(row=3, column=2)
+
+        Label(self.firstView, text="Name").grid(row=4, column=0)
+        OptionMenu(self.firstView, self.name_var, "Julia", "Elina").grid(row=4, column=2)
 
         Button(self.firstView, text="Submit", command=self._goToMainView).grid(row=4, column=3)
 
@@ -129,8 +130,9 @@ class VideoAnnotations():
         for idx, val in enumerate(self.ui_data_structure["Expressions"]):
             Radiobutton(self.mainView, text=val, variable=self.expressions_var, value=val).grid(sticky=W, row=20, column=idx)
 
-        Button(self.mainView, text="Play", command=self._onPlay).grid(row=21, column = 4)
-        Button(self.mainView, text="RePlay", command=self._onRePlay).grid(row=21, column=5)
+        Button(self.mainView, text="Play", command=self._onPlay).grid(row=21, column = 0)
+        Button(self.mainView, text="RePlay", command=self._onRePlay).grid(row=21, column=4)
+        Button(self.mainView, text="PlayNewVideo", command=self._onPlayNewVideo).grid(row=21, column=5)
 
 
     def _browse_button(self):
@@ -153,8 +155,6 @@ class VideoAnnotations():
 
         # if selected_subject not in self.results:
         # self.results[selected_subject] = []
-        #     playVideo()
-        #     return
         #
         # var_6_res = []
         # for item in var_6:
@@ -182,8 +182,20 @@ class VideoAnnotations():
     def _endOfVideo(self):
         endOfVideo()
         ###at the end, print the file
-        with open('data.js', 'w+') as outfile:
+        fileName = self.name_var.get() + "_" + self.exp_number_var.get() + "_" + self.round_var.get()+ ".json"
+        with open(fileName, 'w+') as outfile:
             json.dump(self.results, outfile)
 
     def _onRePlay(self):
-        return
+        startVideo(self.video_path_var.get())
+        playVideo()
+
+    def _onPlayNewVideo(self):
+        self.results = {}
+        self.video_path_var.set("")
+        self.mainView.grid_forget()
+        self.firstView.grid(row=0, column=0)
+
+    def start(self):
+        self.firstView.grid(row=0, column = 0)
+        self.root.mainloop()
