@@ -4,8 +4,9 @@
 import pandas as pd
 
 #lode data
-xls = pd.ExcelFile("‏‏study_summer_data.xlsx")
-aq_data = xls.parse(sheet_name='AQ')
+# xls = pd.ExcelFile("‏‏study_summer_data.xlsx")
+# aq_data = xls.parse(sheet_name='AQ')
+original_data = pd.read_csv('/Users/ronkerbs/PycharmProjects/FinalProject/data.tsv', sep ="\t")
 
 score_dict={}
 
@@ -22,7 +23,7 @@ communication=[7,17,18,26,27,31,33,35,38,39]
 imagination=[3,8,14,20,21,24,40,41,42,50]
 
 #go over every subject:
-for index, row in aq_data.iterrows():
+for index, row in original_data.iterrows():
     score_dict[index]={}
     total_score=0
     social_skill_score=0
@@ -38,7 +39,7 @@ for index, row in aq_data.iterrows():
 
         if question in questions_high:
             #agree
-            if row[question]>2:
+            if "dis" not in row["AQ_"+str(question)].lower():
                 total_score+=1
 
                 if question in social_skill:
@@ -57,7 +58,7 @@ for index, row in aq_data.iterrows():
                     imagination_score += 1
 
         elif question in questions_low:
-            if row[question] <3:
+            if "dis" in row["AQ_" + str(question)].lower():
                 total_score+=1
 
                 if question in social_skill:
@@ -89,14 +90,16 @@ aq_score_df= pd.DataFrame.from_dict(score_dict, orient='index')
 
 aq_score_df=aq_score_df[['social_skill','attention_switching','attention_to_detail','communication','imagination','AQ_total_score']]
 
+data_fm = pd.concat([original_data, aq_score_df], axis=1)
+
 
 ##export to excel
 # Create a Pandas Excel writer using XlsxWriter as the engine.
-writer = pd.ExcelWriter('AQ_scores.xlsx', engine='xlsxwriter')
-
-# Write each dataframe to a different worksheet.
-aq_score_df.to_excel(writer, sheet_name='AQ_scores')
-
-
-# Close the Pandas Excel writer and output the Excel file.
-writer.save()
+# writer = pd.ExcelWriter('AQ_scores.xlsx', engine='xlsxwriter')
+#
+# # Write each dataframe to a different worksheet.
+# aq_score_df.to_excel(writer, sheet_name='AQ_scores')
+#
+#
+# # Close the Pandas Excel writer and output the Excel file.
+# writer.save()

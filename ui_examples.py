@@ -73,5 +73,11 @@
 
 import json
 
+
+
+
 with open('data.js', 'w+') as outfile:
     json.dump({"a": 1, "b":2}, outfile)
+
+
+
