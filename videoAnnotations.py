@@ -23,6 +23,7 @@ class VideoAnnotations():
         self.turn_var = StringVar()
 
         self.gaze_direction_var = StringVar()
+        self.gaze_options_var = StringVar()
         self.body_orientation_var = StringVar()
         self.body_posture_var = StringVar()
         self.head_orientation_var = StringVar()
@@ -41,7 +42,7 @@ class VideoAnnotations():
         self.show_something_to_someone_options_var = StringVar()
 
         self.no_action_at_turn_var = IntVar()
-        self.text = Text(self.mainView, width=50, height=8, takefocus=0)
+        self.text = Text(self.mainView, width=25, height=6, takefocus=0, bg= "gray")
 
         self.ui_data_structure = {}
         self.ui_data_structure["Gaze direction"] = ["A", "B", "C", "D" ,"Up", "Down", "Aside"]
@@ -76,7 +77,7 @@ class VideoAnnotations():
         OptionMenu(self.firstView, self.round_var, 0, 1).grid(row=3, column=2)
 
         Label(self.firstView, text="Name").grid(row=4, column=0)
-        OptionMenu(self.firstView, self.name_var, "Julia", "Elina").grid(row=4, column=2)
+        OptionMenu(self.firstView, self.name_var, "Julia", "Elina").grid(row=4, column=2 , sticky="ew")
 
         Button(self.firstView, text="Submit", command=self._goToMainView).grid(row=4, column=3)
 
@@ -95,6 +96,9 @@ class VideoAnnotations():
 
         for idx, val in enumerate(self.ui_data_structure["Gaze direction"]):
             Radiobutton(self.mainView, text=val, variable=self.gaze_direction_var, value=val).grid(sticky=W, row=6, column=idx)
+
+        OptionMenu(self.mainView, self.gaze_options_var, 'Gaze', 'Stare').grid(row=6, column=7, sticky="ew")
+        self.gaze_options_var.set("Gaze")
 
         ###### Body orientation section  #######
         Label(self.mainView, text="Body orientation", font='Helvetica 11').grid(row=7)
@@ -153,7 +157,10 @@ class VideoAnnotations():
 
         Checkbutton(self.mainView, text="No action at turn ", variable=self.no_action_at_turn_var).grid(sticky=W, row=25, column=0)
 
-        self.text.grid(row=26, column=0, padx=10, pady=2)
+        ###### Free text  #######
+        Label(self.mainView, text="Free text:").grid(row=26, column =0)
+
+        self.text.grid(row=26, column=1)
 
         Button(self.mainView, text="Play", command=self._onPlay).grid(row=30, column = 0)
         Button(self.mainView, text="RePlay", command=self._onRePlay).grid(row=30, column=4)
