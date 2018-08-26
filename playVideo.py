@@ -2,7 +2,7 @@ import cv2
 import time
 import tkMessageBox
 
-time_slot = 500
+time_slot = 1
 
 def startVideo(videoPath):
     # Create a VideoCapture object and read from input file

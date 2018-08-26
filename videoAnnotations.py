@@ -27,19 +27,31 @@ class VideoAnnotations():
         self.body_posture_var = StringVar()
         self.head_orientation_var = StringVar()
         self.head_movement_var = StringVar()
-        self.gestures_var = []
+        self.gesture_var = StringVar()
         self.emotions_var = StringVar()
         self.expressions_var = StringVar()
 
+        self.point_at_var = IntVar()
+        self.point_at_options_var = StringVar()
+
+        self.look_for_approval_of_var = IntVar()
+        self.look_for_approval_of_options_var = StringVar()
+
+        self.show_something_to_someone_var = IntVar()
+        self.show_something_to_someone_options_var = StringVar()
+
+        self.no_action_at_turn_var = IntVar()
+        self.text = Text(self.mainView, width=50, height=8, takefocus=0)
+
         self.ui_data_structure = {}
-        self.ui_data_structure["Gaze direction"] = ["Left", "Right", "Straight", "Up", "Down", "Aversion"]
-        self.ui_data_structure["Body orientation"] = ["Left", "Right", "Straight"]
-        self.ui_data_structure["Body posture"] = ["Leaning Front", "Neutral", "Leaning Back"]
-        self.ui_data_structure["Head orientation"] = ["Left", "Right", "Straight"]
-        self.ui_data_structure["Head movement"] = ["Nodding", "Head Shaking", "tilting"]
-        self.ui_data_structure["Gestures"] = ["Hand palms together", "separated", "head leaning on hand", "hands touching face/body"]
-        self.ui_data_structure["Emotions"] = ["fear", "sadness", "happiness", "anger", "disgust", "surprise"]
-        self.ui_data_structure["Expressions"] = ["Smiling", "Eyebrows raised/lowered", "Grimase"]
+        self.ui_data_structure["Gaze direction"] = ["A", "B", "C", "D" ,"Up", "Down", "Aside"]
+        self.ui_data_structure["Body orientation"] = ["A", "B", "C", "D"]
+        self.ui_data_structure["Body posture"] = ["Leaning Front", "Leaning Back", "Jumpy", "Stiff", "Neutral"]
+        self.ui_data_structure["Head orientation"] = ["A", "B", "C", "D"]
+        self.ui_data_structure["Head movement"] = ["Nodding", "Shaking", "Tilting"]
+        self.ui_data_structure["Gestures"] = ["Hand palms together", "Arms folded", "head leaning on hand", "hands touching face/body", "Play with hands", "Clap hands", "Thumbs down", "Thumbs up", "Disagreeing hand"]
+        self.ui_data_structure["Emotions"] = ["Serious", "Bored", "Attentive" , "Skeptical"]
+        self.ui_data_structure["Expressions"] = ["Smile","Sour face","Laugh","Yawn", "Aversion", "Eyebrows raised/lowered", "Grimase"]
 
         self._createFirstView()
         self._createMainView()
@@ -71,68 +83,81 @@ class VideoAnnotations():
 
     def _createMainView(self):
 
-        Label(self.mainView, text="Participant that is being watched:").grid(row=1, column=1)
-        OptionMenu(self.mainView, self.subject_var, 'A', 'B', 'C', 'D').grid(row=1, column=2)
+        Label(self.mainView, text="Participant that is being watched:").grid(row=1, column=0)
+        OptionMenu(self.mainView, self.subject_var, 'A', 'B', 'C', 'D').grid(row=1, column=1)
 
-        Label(self.mainView, text="The turn of participant:").grid(row=2, column=1)
-        OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=2, column=2)
+        Label(self.mainView, text="The turn of participant:").grid(row=2, column=0)
+        OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=2, column=1)
 
 
         ###### Gaze direction section  #######
-        Label(self.mainView, text="Gaze direction").grid(row=5)
+        Label(self.mainView, text="Gaze direction" , font='Helvetica 11').grid(row=5)
 
         for idx, val in enumerate(self.ui_data_structure["Gaze direction"]):
             Radiobutton(self.mainView, text=val, variable=self.gaze_direction_var, value=val).grid(sticky=W, row=6, column=idx)
 
         ###### Body orientation section  #######
-        Label(self.mainView, text="Body orientation").grid(row=7)
+        Label(self.mainView, text="Body orientation", font='Helvetica 11').grid(row=7)
 
         for idx, val in enumerate(self.ui_data_structure["Body orientation"]):
             Radiobutton(self.mainView, text=val, variable=self.body_orientation_var, value=val).grid(sticky=W, row=8, column=idx)
 
         ###### Body posture section  #######
-        Label(self.mainView, text="Body posture").grid(row=9)
+        Label(self.mainView, text="Body posture" , font='Helvetica 11').grid(row=9)
 
         for idx, val in enumerate(self.ui_data_structure["Body posture"]):
             Radiobutton(self.mainView, text=val, variable=self.body_posture_var, value=val).grid(sticky=W, row=10, column=idx)
 
         ###### Head orientation section  #######
-        Label(self.mainView, text="Head orientation").grid(row=11)
+        Label(self.mainView, text="Head orientation", font='Helvetica 11').grid(row=11)
 
         for idx, val in enumerate(self.ui_data_structure["Head orientation"]):
             Radiobutton(self.mainView, text=val, variable=self.head_orientation_var, value=val).grid(sticky=W, row=12, column=idx)
 
         ###### Head movement section  #######
-        Label(self.mainView, text="Head movement").grid(row=13)
+        Label(self.mainView, text="Head movement", font='Helvetica 11').grid(row=13)
 
         for idx, val in enumerate(self.ui_data_structure["Head movement"]):
             Radiobutton(self.mainView, text=val, variable=self.head_movement_var, value=val).grid(sticky=W, row=14, column=idx)
 
         ###### Gestures section  #######
-        Label(self.mainView, text="Gestures").grid(row=15)
+        Label(self.mainView, text="Gestures", font='Helvetica 11').grid(row=15)
 
         for idx, val in enumerate(self.ui_data_structure["Gestures"]):
-            var = IntVar()
-            self.gestures_var.append(var)
-            var.set(0)
-            setattr(var, "ui_value", val)
-            Checkbutton(self.mainView, text=val, variable=var).grid(sticky=W, row=16, column=idx)
+            Radiobutton(self.mainView, text=val, variable=self.gesture_var, value=val).grid(sticky=W, row=16, column=idx)
 
         ###### Emotions section  #######
-        Label(self.mainView, text="Emotions", font='Helvetica 11 bold').grid(row=17)
+        Label(self.mainView, text="Emotions", font='Helvetica 11').grid(row=17)
 
         for idx, val in enumerate(self.ui_data_structure["Emotions"]):
             Radiobutton(self.mainView, text=val, variable=self.emotions_var, value=val).grid(sticky=W, row=18, column=idx)
 
         ###### Expressions section  #######
-        Label(self.mainView, text="Expressions", font='Helvetica 11 bold').grid(row=19)
+        Label(self.mainView, text="Expressions", font='Helvetica 11').grid(row=19)
 
         for idx, val in enumerate(self.ui_data_structure["Expressions"]):
             Radiobutton(self.mainView, text=val, variable=self.expressions_var, value=val).grid(sticky=W, row=20, column=idx)
 
-        Button(self.mainView, text="Play", command=self._onPlay).grid(row=21, column = 0)
-        Button(self.mainView, text="RePlay", command=self._onRePlay).grid(row=21, column=4)
-        Button(self.mainView, text="PlayNewVideo", command=self._onPlayNewVideo).grid(row=21, column=5)
+        ###### Action at turn  #######
+        Label(self.mainView, text="Action at turn", font='Helvetica 11').grid(row=21)
+
+        #####
+        Checkbutton(self.mainView, text="Point at: ", variable=self.point_at_var).grid(sticky=W, row=22 , column = 0)
+        OptionMenu(self.mainView, self.point_at_options_var, 'A', 'B', 'C', 'D').grid(row=22, column=1)
+
+        Checkbutton(self.mainView, text="Look for approval of: ", variable=self.look_for_approval_of_var).grid(sticky=W, row=23, column=0)
+        OptionMenu(self.mainView, self.look_for_approval_of_options_var, 'A', 'B', 'C', 'D').grid(row=23, column=1)
+
+        Checkbutton(self.mainView, text="Show something to someone ", variable=self.show_something_to_someone_var).grid(sticky=W, row=24, column=0)
+        OptionMenu(self.mainView, self.show_something_to_someone_options_var, 'A', 'B', 'C', 'D').grid(row=24, column=1)
+
+        Checkbutton(self.mainView, text="No action at turn ", variable=self.no_action_at_turn_var).grid(sticky=W, row=25, column=0)
+
+        self.text.grid(row=26, column=0, padx=10, pady=2)
+
+        Button(self.mainView, text="Play", command=self._onPlay).grid(row=30, column = 0)
+        Button(self.mainView, text="RePlay", command=self._onRePlay).grid(row=30, column=4)
+        Button(self.mainView, text="PlayNewVideo", command=self._onPlayNewVideo).grid(row=30, column=5)
 
 
     def _browse_button(self):
@@ -197,5 +222,5 @@ class VideoAnnotations():
         self.firstView.grid(row=0, column=0)
 
     def start(self):
-        self.firstView.grid(row=0, column = 0)
+        self.mainView.grid(row=0, column = 0)
         self.root.mainloop()

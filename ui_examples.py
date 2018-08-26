@@ -5,8 +5,8 @@
 # #          borderwidth=1 ).grid(row=r,column=c)
 # # root.mainloop(  )
 #
-# from Tkinter import *
-# import Tkinter, Tkconstants, tkFileDialog
+from Tkinter import *
+import Tkinter, Tkconstants, tkFileDialog
 #
 # # Tkconstantsroot = Tk()
 # # root.filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
@@ -32,20 +32,16 @@
 #     OptionMenu(frame2, turn_var, 'A', 'B', 'C', 'D').grid(row=2, column=2)
 #
 #
-# root = Tk()
-# frame1 = Frame(root)
-# frame1.grid(row=0, column=0)
-# folder_path = StringVar()
-# lbl1 = Label(frame1,textvariable=folder_path)
-# lbl1.grid(row=0, column=1)
-# button2 = Button(frame1, text="switch", command=switch)
-# button2.grid(row=0, column=3)
-# turn_var1 = StringVar()
-# Label(frame1, text="The turn of participant:").grid(row=2, column=1)
-# OptionMenu(frame1, turn_var1, 'A4', 'B4', '4C', '4D').grid(row=2, column=2)
+root = Tk()
+newText = Text(root, width=50, height=8, takefocus=0)
+newText.grid(row=0, column=0, padx=10, pady=2)
+
+#write to widget
+newText.insert(0.0, "Text to insert")
+print newText.get()
 #
 #
-# mainloop()
+mainloop()
 #
 # #######################################################
 # ##### toggle button
@@ -71,7 +67,7 @@
 # #######################################################
 #
 
-import json
-
-with open('data.js', 'w+') as outfile:
-    json.dump({"a": 1, "b":2}, outfile)
+# mainloopimport json
+#
+# with open('data.js', 'w+') as outfile:
+#     json.dump({"a": 1, "b":2}, outfile)
