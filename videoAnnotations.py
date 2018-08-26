@@ -126,7 +126,7 @@ class VideoAnnotations():
 
         ###### Expressions section  #######
         Label(self.mainView, text="Expressions:").grid(row=19, column=0, sticky="e")
-        OptionMenu(self.mainView, self.emotions_var, *self.ui_data_structure["Expressions"]).grid(row=19, column=1, sticky="ew")
+        OptionMenu(self.mainView, self.expressions_var, *self.ui_data_structure["Expressions"]).grid(row=19, column=1, sticky="ew")
 
         ###### Action at turn  #######
         self.mainView.grid_rowconfigure(20, minsize=25)
@@ -167,42 +167,54 @@ class VideoAnnotations():
     def _onPlay(self):
 
         selected_subject = self.subject_var.get()
-        print selected_subject
 
-        # if not selected_subject:
-        #     tkMessageBox.showerror("no subject", "select a subject to continue")
-        #     return
+        if not selected_subject:
+            tkMessageBox.showerror("no subject", "select a subject to continue")
+            return
 
-        # if selected_subject not in self.results:
-        # self.results[selected_subject] = []
-        #
-        # var_6_res = []
-        # for item in var_6:
-        #     if item.get():
-        #         var_6_res.append(item.ui_value)
-        #
-        # results[selected_subject].append({
-        #    'turn': turn.get(),
-        #    'start_time' : video_time,
-        #    'end_time' : video_time + time_slot,
-        #    'Gaze direction': var_1.get(),
-        #    'Body orientation':  var_2.get(),
-        #    'Body posture':  var_3.get(),
-        #    'Head orientation':  var_4.get(),
-        #    'Head movement':  var_5.get(),
-        #    'Gestures':  var_6_res,
-        #    'Emotions':  var_7.get(),
-        #    'Expressions':  var_8.get(),
-        # })
+        if selected_subject not in self.results:
+            self.results[selected_subject] = {}
+
+        annotation = {
+            'turn of': self.turn_var.get(),
+            'start_time' : self.video_time,
+            'end_time' : self.video_time + time_slot,
+            'Gaze direction': self.gaze_direction_var.get(),
+            'Gaze behavior': self.gaze_options_var.get(),
+            'Body orientation':  self.body_orientation_var .get(),
+            'Body posture':  self.body_posture_var .get(),
+            'Head orientation':  self.head_orientation_var.get(),
+            'Head movement':  self.head_movement_var .get(),
+            'Gestures':  self.gesture_var.get(),
+            'Emotions':  self.emotions_var .get(),
+            'Expressions':  self.expressions_var.get(),
+        }
+
+        if self.point_at_var.get():
+            annotation["Point at"] = self.point_at_options_var.get()
+
+        if self.look_for_approval_of_var.get():
+            annotation["Look for approval of"] = self.look_for_approval_of_options_var.get()
+
+        if self.show_something_to_someone_var.get():
+            annotation["Show something to participant"] = self.show_something_to_someone_options_var.get()
+
+        if self.no_action_at_turn_var.get():
+            annotation["No action at current turn"] = True
+
+        if self.text.get(1.0, END) != "\n":
+            annotation["Additional input"] = self.text.get(1.0, END)
+
+        self.results[selected_subject][self.video_time] = annotation
 
         self.video_time += time_slot
-        if not playVideo():
-            self._endOfVideo()
+        # if not playVideo():
+        self._endOfVideo()
 
     def _endOfVideo(self):
-        endOfVideo()
+        # endOfVideo()
         ###at the end, print the file
-        fileName = self.name_var.get() + "_" + self.exp_number_var.get() + "_" + self.round_var.get()+ ".json"
+        fileName = "./"+self.name_var.get() + "_" + self.exp_number_var.get() + "_" + self.round_var.get()+ ".json"
         with open(fileName, 'w+') as outfile:
             json.dump(self.results, outfile)
 
@@ -217,5 +229,12 @@ class VideoAnnotations():
         self.firstView.grid(row=0, column=0)
 
     def start(self):
-        self.mainView.grid(row=0, column = 0)
+        self.firstView.grid(row=0, column = 0)
+        self.root.mainloop()
+
+    def test(self):
+        self.name_var.set("Elina")
+        self.exp_number_var.set(4)
+        self.round_var.set(0)
+        self.mainView.grid(row=0, column=0)
         self.root.mainloop()
