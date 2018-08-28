@@ -1,4 +1,4 @@
 from videoAnnotations import *
 
 va = VideoAnnotations()
-va.test()
+va.start()

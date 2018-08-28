@@ -61,7 +61,7 @@ class VideoAnnotations():
         self.firstView.grid_forget()
         self.mainView.grid(row=0, column = 0)
         startVideo(self.video_path_var.get())
-        playVideo()
+        showVideo()
 
 
     def _createFirstView(self):
@@ -85,10 +85,12 @@ class VideoAnnotations():
     def _createMainView(self):
 
         Label(self.mainView, text="Participant that is being watched:").grid(row=1, column=0, sticky="e")
-        OptionMenu(self.mainView, self.subject_var, 'A', 'B', 'C', 'D').grid(row=1, column=1)
+        OptionMenu(self.mainView, self.subject_var, 'A', 'C', 'D').grid(row=1, column=1)
+        Button(self.mainView, text="Go", command=self._onRePlay).grid(row=1, column=4)
 
         Label(self.mainView, text="The turn of participant:").grid(row=2, column=0, sticky="e")
         OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=2, column=1)
+        self.turn_var.set("A")
 
         self.mainView.grid_rowconfigure(4, minsize=25)
 
@@ -208,17 +210,21 @@ class VideoAnnotations():
         self.results[selected_subject][self.video_time] = annotation
 
         self.video_time += time_slot
-        # if not playVideo():
-        self._endOfVideo()
+
+        if not playVideo():
+            tkMessageBox.showerror("End of Video", "The video ended.")
+            self._endOfVideo()
 
     def _endOfVideo(self):
-        # endOfVideo()
-        ###at the end, print the file
+        endOfVideo()
+
+        # at the end, print the file
         fileName = "./"+self.name_var.get() + "_" + self.exp_number_var.get() + "_" + self.round_var.get()+ ".json"
         with open(fileName, 'w+') as outfile:
             json.dump(self.results, outfile)
 
     def _onRePlay(self):
+        self.turn_var.set("A")
         startVideo(self.video_path_var.get())
         playVideo()
 
@@ -226,6 +232,8 @@ class VideoAnnotations():
         self.results = {}
         self.video_path_var.set("")
         self.mainView.grid_forget()
+        destroy()
+        self.video_time = 0
         self.firstView.grid(row=0, column=0)
 
     def start(self):
