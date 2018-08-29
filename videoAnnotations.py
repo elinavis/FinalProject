@@ -86,7 +86,7 @@ class VideoAnnotations():
 
         Label(self.mainView, text="Participant that is being watched:").grid(row=1, column=0, sticky="e")
         OptionMenu(self.mainView, self.subject_var, 'A', 'C', 'D').grid(row=1, column=1)
-        Button(self.mainView, text="Go", command=self._onRePlay).grid(row=1, column=4)
+        Button(self.mainView, text="Go", command=self._onRePlay).grid(row=1, column=2)
 
         Label(self.mainView, text="The turn of participant:").grid(row=2, column=0, sticky="e")
         OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=2, column=1)
