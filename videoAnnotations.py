@@ -50,9 +50,9 @@ class VideoAnnotations():
         self.ui_data_structure["Body posture"] = ["Leaning Front", "Leaning Back", "Jumpy", "Stiff", "Neutral"]
         self.ui_data_structure["Head orientation"] = ["A", "B", "C", "D"]
         self.ui_data_structure["Head movement"] = ["Nodding", "Shaking", "Tilting"]
-        self.ui_data_structure["Gestures"] = ["Hand palms together", "Arms folded", "head leaning on hand", "hands touching face/body", "Play with hands", "Clap hands", "Thumbs down", "Thumbs up", "Disagreeing hand"]
-        self.ui_data_structure["Emotions"] = ["Serious", "Bored", "Attentive" , "Skeptical"]
-        self.ui_data_structure["Expressions"] = ["Smile","Sour face","Laugh","Yawn", "Aversion", "Eyebrows raised/lowered", "Grimase"]
+        self.ui_data_structure["Gestures"] = ["Hand palms together", "Arms folded", "head leaning on hand", "hands touching face/body", "Play with hands", "Clap hands", "Thumbs down", "Thumbs up", "Disagreeing hand", "none of the above"]
+        self.ui_data_structure["Emotions"] = ["Serious", "Bored", "Attentive" , "Skeptical", "none of the above"]
+        self.ui_data_structure["Expressions"] = ["Smile","Sour face","Laugh","Yawn", "Aversion", "Eyebrows raised/lowered", "Grimase", "none of the above"]
 
         self._createFirstView()
         self._createMainView()
@@ -206,13 +206,14 @@ class VideoAnnotations():
 
         if self.text.get(1.0, END) != "\n":
             annotation["Additional input"] = self.text.get(1.0, END)
+            self.text.set("\n")
 
         self.results[selected_subject][self.video_time] = annotation
 
         self.video_time += time_slot
 
         if not playVideo():
-            tkMessageBox.showerror("End of Video", "The video ended.")
+            tkMessageBox.showinfo("End of Video", "The video ended.")
             self._endOfVideo()
 
     def _endOfVideo(self):
@@ -229,10 +230,10 @@ class VideoAnnotations():
         playVideo()
 
     def _onPlayNewVideo(self):
+        destroy()
         self.results = {}
         self.video_path_var.set("")
         self.mainView.grid_forget()
-        destroy()
         self.video_time = 0
         self.firstView.grid(row=0, column=0)
 
