@@ -57,15 +57,6 @@ class VideoAnnotations():
         self._createFirstView()
         self._createMainView()
 
-    def _goToMainView(self):
-        self.firstView.grid_forget()
-        self.mainView.grid(row=0, column = 0)
-        startVideo(self.video_path_var.get())
-        showVideo()
-
-        self.turn_var.set("A")
-        self.gaze_options_var.set("Gaze")
-
 
     def _createFirstView(self):
 
@@ -236,9 +227,18 @@ class VideoAnnotations():
         destroy()
         self.results = {}
         self.video_path_var.set("")
-        self.video_time = 0
         self.mainView.grid_forget()
         self.firstView.grid(row=0, column=0)
+
+    def _goToMainView(self):
+        self.firstView.grid_forget()
+        self.mainView.grid(row=0, column = 0)
+        startVideo(self.video_path_var.get())
+        showVideo()
+
+        self.video_time = 0
+        self.turn_var.set("A")
+        self.gaze_options_var.set("Gaze")
 
     def start(self):
         self.firstView.grid(row=0, column = 0)
