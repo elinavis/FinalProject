@@ -63,6 +63,9 @@ class VideoAnnotations():
         startVideo(self.video_path_var.get())
         showVideo()
 
+        self.turn_var.set("A")
+        self.gaze_options_var.set("Gaze")
+
 
     def _createFirstView(self):
 
@@ -92,7 +95,6 @@ class VideoAnnotations():
 
         Label(self.mainView, text="The turn of participant:").grid(row=3, column=0, sticky="e")
         OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=3, column=1)
-        self.turn_var.set("A")
 
         ###### Gaze direction section  #######
         Label(self.mainView, text="Gaze direction:" ).grid(row=5, column = 0, sticky="e")
@@ -100,7 +102,6 @@ class VideoAnnotations():
 
         Label(self.mainView, text="Behavior:" ).grid(row=5, column = 3, sticky="e")
         OptionMenu(self.mainView, self.gaze_options_var, 'Gaze', 'Stare').grid(row=5, column=4, sticky="ew")
-        self.gaze_options_var.set("Gaze")
 
         ###### Body orientation section  #######
         Label(self.mainView, text="Body orientation:").grid(row=7, column = 0, sticky="e")
