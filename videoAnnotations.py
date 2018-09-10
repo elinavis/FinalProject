@@ -86,13 +86,13 @@ class VideoAnnotations():
 
         Label(self.mainView, text="Participant that is being watched:").grid(row=1, column=0, sticky="e")
         OptionMenu(self.mainView, self.subject_var, 'A', 'C', 'D').grid(row=1, column=1)
-        Button(self.mainView, text="Go", command=self._onRePlay).grid(row=1, column=2)
+        Button(self.mainView, text="Go", command=self._onGo).grid(row=1, column=2)
 
-        Label(self.mainView, text="The turn of participant:").grid(row=2, column=0, sticky="e")
-        OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=2, column=1)
+        self.mainView.grid_rowconfigure(2, minsize=25)
+
+        Label(self.mainView, text="The turn of participant:").grid(row=3, column=0, sticky="e")
+        OptionMenu(self.mainView, self.turn_var, 'A', 'B', 'C', 'D').grid(row=3, column=1)
         self.turn_var.set("A")
-
-        self.mainView.grid_rowconfigure(4, minsize=25)
 
         ###### Gaze direction section  #######
         Label(self.mainView, text="Gaze direction:" ).grid(row=5, column = 0, sticky="e")
@@ -153,8 +153,8 @@ class VideoAnnotations():
         self.text.grid(row=26, column=1)
 
         Button(self.mainView, text="Play", command=self._onPlay).grid(row=30, column = 0)
-        Button(self.mainView, text="RePlay Current Video", command=self._onRePlay).grid(row=30, column=4)
-        Button(self.mainView, text="Play New Video", command=self._onPlayNewVideo).grid(row=30, column=5)
+        # Button(self.mainView, text="RePlay Current Video", command=self._onRePlay).grid(row=30, column=4)
+        Button(self.mainView, text="Play New Video", command=self._onPlayNewVideo).grid(row=30, column=4)
 
 
     def _browse_button(self):
@@ -206,7 +206,7 @@ class VideoAnnotations():
 
         if self.text.get(1.0, END) != "\n":
             annotation["Additional input"] = self.text.get(1.0, END)
-            self.text.set("\n")
+            self.text.delete('1.0', END)
 
         self.results[selected_subject][self.video_time] = annotation
 
@@ -224,10 +224,11 @@ class VideoAnnotations():
         with open(fileName, 'w+') as outfile:
             json.dump(self.results, outfile)
 
-    def _onRePlay(self):
+    def _onGo(self):
         self.turn_var.set("A")
         startVideo(self.video_path_var.get())
         playVideo()
+
 
     def _onPlayNewVideo(self):
         destroy()

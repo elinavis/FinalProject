@@ -30,11 +30,15 @@ def playVideo():
 
     # Read until video is completed
     t_end = time.time() + time_slot
+    res = False
+
     while (cap.isOpened() and  time.time() < t_end):
         # Capture frame-by-frame
         ret, frame = cap.read()
+
         if ret == True:
 
+            res = True
             # Display the resulting frame
             cv2.imshow('Frame', frame)
 
@@ -45,7 +49,7 @@ def playVideo():
         # Break the loop
         else:
             # break
-            return False
+            return res
 
     return True
 
