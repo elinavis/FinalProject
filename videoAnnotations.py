@@ -227,6 +227,7 @@ class VideoAnnotations():
 
     def _onGo(self):
         self.turn_var.set("A")
+        self.video_time = 0
         startVideo(self.video_path_var.get())
         playVideo()
 
@@ -235,8 +236,8 @@ class VideoAnnotations():
         destroy()
         self.results = {}
         self.video_path_var.set("")
-        self.mainView.grid_forget()
         self.video_time = 0
+        self.mainView.grid_forget()
         self.firstView.grid(row=0, column=0)
 
     def start(self):
