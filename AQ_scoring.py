@@ -1,13 +1,11 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 import pandas as pd
 
 #lode data
-# xls = pd.ExcelFile("‏‏study_summer_data.xlsx")
-# aq_data = xls.parse(sheet_name='AQ')
-original_data = pd.read_csv('/Users/ronkerbs/PycharmProjects/FinalProject/data.tsv', sep ="\t")
+original_data = pd.read_csv('data.tsv', sep ="\t")
 
+
+
+############################## AQ
 score_dict={}
 
 #parametres:
@@ -85,21 +83,50 @@ for index, row in original_data.iterrows():
     score_dict[index]['communication'] = communication_score
     score_dict[index]['imagination'] = imagination_score
 
+
+
 # crate df:
 aq_score_df= pd.DataFrame.from_dict(score_dict, orient='index')
 
 aq_score_df=aq_score_df[['social_skill','attention_switching','attention_to_detail','communication','imagination','AQ_total_score']]
 
-data_fm = pd.concat([original_data, aq_score_df], axis=1)
+
+############################## NARS
+# Sub-scale 1: Negative Attitudes toward Situations and Interactions with Robots. Items - 4,7,8,9,10,12
+# Sub-scale 2: Negative Attitudes toward Social Influence of Robots. Items - 1,2,11,13,14
+# Sub-scale 3: Negative Attitudes toward Emotions in Interaction with Robots. Items - 3r,5r,6r
+
+NARS_titles = []
+for i in range(1, 15):
+    strNARS_i = 'NARS_' + str(i)
+    NARS_titles.append(strNARS_i)
+
+df_NARS = original_data[NARS_titles]
+df_NARS= df_NARS.replace("Strongly disagree", "1")
+df_NARS= df_NARS.replace("Disagree", "2")
+df_NARS= df_NARS.replace("Neither agree nor disagree", "3")
+df_NARS= df_NARS.replace("Agree", "4")
+df_NARS= df_NARS.replace("Strongly agree", "5")
+NARS_sub1_mean = df_NARS[["NARS_4", "NARS_7", "NARS_8", "NARS_9", "NARS_10", "NARS_12"]].astype(int).mean(axis=1).to_frame("NARS_sub1_mean")
+NARS_sub2_mean = df_NARS[["NARS_1", "NARS_2", "NARS_11", "NARS_13", "NARS_14"]].astype(int).mean(axis=1).to_frame("NARS_sub2_mean")
+NARS_sub3_mean = (6 - df_NARS[["NARS_3", "NARS_5", "NARS_6"]].astype(int).mean(axis=1)).to_frame("NARS_sub3_mean")
+NARS_sub1_sum = df_NARS[["NARS_4", "NARS_7", "NARS_8", "NARS_9", "NARS_10", "NARS_12"]].astype(int).sum(axis=1).to_frame("NARS_sub1_mean")
+NARS_sub2_sum = df_NARS[["NARS_1", "NARS_2", "NARS_11", "NARS_13", "NARS_14"]].astype(int).sum(axis=1).to_frame("NARS_sub2_mean")
+NARS_sub3_sum = (6 - df_NARS[["NARS_3", "NARS_5", "NARS_6"]].astype(int).sum(axis=1)).to_frame("NARS_sub3_mean")
 
 
-##export to excel
+
+
+#export to excel
+data_fm = pd.concat([original_data["ResponseId", "exp number", "participant number", "participant letter", "age", "sex"],
+                     aq_score_df, NARS_sub1_mean, NARS_sub2_mean, NARS_sub3_mean, NARS_sub1_sum, NARS_sub2_sum, NARS_sub3_sum], axis=1)
+
 # Create a Pandas Excel writer using XlsxWriter as the engine.
-# writer = pd.ExcelWriter('AQ_scores.xlsx', engine='xlsxwriter')
-#
-# # Write each dataframe to a different worksheet.
-# aq_score_df.to_excel(writer, sheet_name='AQ_scores')
-#
-#
-# # Close the Pandas Excel writer and output the Excel file.
-# writer.save()
+writer = pd.ExcelWriter('questionnaires.xlsx')
+
+# Write each dataframe to a different worksheet.
+data_fm.to_excel(writer)
+
+
+# Close the Pandas Excel writer and output the Excel file.
+writer.save()
