@@ -125,8 +125,27 @@ df_godspeed = original_data[["Godspeed_" + str(i) for i in range(17, 25)]]
 df_godspeed["Godspeed_21"] = 6 - df_godspeed["Godspeed_21"].astype(int)
 df_godspeed["Godspeed_23"] = 6 - df_godspeed["Godspeed_23"].astype(int)
 
-df_godspeed_4 = df_godspeed[["Godspeed_" + str(i) for i in range(17, 21)]].astype(int).mean(axis=1).to_frame("GODSPEED 4: PERCEIVED INTELLIGENCE")
-df_godspeed_5 = df_godspeed[["Godspeed_" + str(i) for i in range(21, 25)]].astype(int).mean(axis=1).to_frame("GODSPEED 5: PERCEIVED SAFETY")
+df_godspeed_4 = df_godspeed[["Godspeed_" + str(i) for i in range(17, 22)]].astype(int).mean(axis=1).to_frame("GODSPEED 4: PERCEIVED INTELLIGENCE")
+df_godspeed_5 = df_godspeed[["Godspeed_" + str(i) for i in range(22, 25)]].astype(int).mean(axis=1).to_frame("GODSPEED 5: PERCEIVED SAFETY")
+
+############################## SCS
+SCS_titles = []
+for i in range(1, 15):
+    strSCS_i = 'SCS_' + str(i)
+    SCS_titles.append(strSCS_i)
+
+df_CSC = original_data[SCS_titles]
+df_CSC= df_CSC.replace("Strongly disagree", "1")
+df_CSC= df_CSC.replace("Disagree", "2")
+df_CSC= df_CSC.replace("Agree", "3")
+df_CSC= df_CSC.replace("Strongly agree", "4")
+
+SCS_mean = df_CSC.astype(int).mean(axis=1).to_frame("SCS_mean")
+SCS_G_mean = df_CSC[["SCS_" + str(i) for i in range(1, 6)]].astype(int).mean(axis=1).to_frame("SCS_G_mean")
+SCS_C_mean = df_CSC[["SCS_" + str(i) for i in range(8, 13)]].astype(int).mean(axis=1).to_frame("SCS_C_mean")
+SCS_sum = df_CSC.astype(int).sum(axis=1).to_frame("SCS_sum")
+SCS_G_sum = df_CSC[["SCS_" + str(i) for i in range(1, 6)]].astype(int).sum(axis=1).to_frame("SCS_G_sum")
+SCS_C_sum = df_CSC[["SCS_" + str(i) for i in range(8, 13)]].astype(int).sum(axis=1).to_frame("SCS_C_sum")
 
 
 
@@ -134,7 +153,8 @@ df_godspeed_5 = df_godspeed[["Godspeed_" + str(i) for i in range(21, 25)]].astyp
 data_fm = pd.concat([original_data[["ResponseId", "exp number", "participant number", "participant letter", "age", "sex"]],
                      aq_score_df,
                      NARS_sub1_mean, NARS_sub2_mean, NARS_sub3_mean, NARS_sub1_sum, NARS_sub2_sum, NARS_sub3_sum,
-                     df_godspeed_1, df_godspeed_2, df_godspeed_3,df_godspeed_4, df_godspeed_5], axis=1)
+                     df_godspeed_1, df_godspeed_2, df_godspeed_3,df_godspeed_4, df_godspeed_5,
+                     SCS_mean, SCS_G_mean, SCS_C_mean, SCS_sum, SCS_G_sum, SCS_C_sum], axis=1)
 
 # Create a Pandas Excel writer using XlsxWriter as the engine.
 writer = pd.ExcelWriter('questionnaires.xlsx')
