@@ -45,11 +45,11 @@ class VideoAnnotations():
         self.text = Text(self.mainView, width=25, height=6, takefocus=0, bg= "gray")
 
         self.ui_data_structure = {}
-        self.ui_data_structure["Gaze direction"] = ["A", "B", "C", "D" ,"Up", "Down", "Aside"]
-        self.ui_data_structure["Body orientation"] = ["A", "B", "C", "D"]
+        self.ui_data_structure["Gaze direction"] = ["A", "B", "C", "D" ,"Up", "Down", "Aside", "Neutral", "Center of Table"]
+        self.ui_data_structure["Body orientation"] = ["A", "B", "C", "D","Neutral"]
         self.ui_data_structure["Body posture"] = ["Leaning Front", "Leaning Back", "Jumpy", "Stiff", "Neutral"]
-        self.ui_data_structure["Head orientation"] = ["A", "B", "C", "D"]
-        self.ui_data_structure["Head movement"] = ["Nodding", "Shaking", "Tilting"]
+        self.ui_data_structure["Head orientation"] = ["A", "B", "C", "D" ,"Neutral"]
+        self.ui_data_structure["Head movement"] = ["Nodding", "Shaking", "Tilting","Neutral"]
         self.ui_data_structure["Gestures"] = ["Hand palms together", "Arms folded", "head leaning on hand", "hands touching face/body", "Play with hands", "Clap hands", "Thumbs down", "Thumbs up", "Disagreeing hand", "none of the above"]
         self.ui_data_structure["Emotions"] = ["Serious", "Bored", "Attentive" , "Skeptical", "none of the above"]
         self.ui_data_structure["Expressions"] = ["Smile","Sour face","Laugh","Yawn", "Aversion", "Eyebrows raised/lowered", "Grimase", "none of the above"]
@@ -212,7 +212,7 @@ class VideoAnnotations():
         endOfVideo()
 
         # at the end, print the file
-        fileName = "./"+self.name_var.get() + "_" + self.exp_number_var.get() + "_" + self.round_var.get()+ ".json"
+        fileName = "./" + self.name_var.get() + "_" + self.exp_number_var.get() + "_" + self.round_var.get() + "_".join(self.results.keys()) + ".json"
         with open(fileName, 'w+') as outfile:
             json.dump(self.results, outfile)
 
@@ -242,11 +242,4 @@ class VideoAnnotations():
 
     def start(self):
         self.firstView.grid(row=0, column = 0)
-        self.root.mainloop()
-
-    def test(self):
-        self.name_var.set("Elina")
-        self.exp_number_var.set(4)
-        self.round_var.set(0)
-        self.mainView.grid(row=0, column=0)
         self.root.mainloop()
