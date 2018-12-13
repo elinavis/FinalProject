@@ -1,6 +1,6 @@
 import pandas as pd
 
-#lode data
+#load data
 original_data = pd.read_csv('data.tsv', sep ="\t")
 
 
